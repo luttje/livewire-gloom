@@ -2,7 +2,17 @@
 
 Add functions to Laravel Dusk for working with Livewire.
 
+<div align="center">
+
 ![Livewire Gloom](banner.png)
+
+[![run-tests](https://github.com/luttje/livewire-gloom/actions/workflows/run-tests.yml/badge.svg)](https://github.com/luttje/livewire-gloom/actions/workflows/run-tests.yml)
+[![Coverage Status](https://coveralls.io/repos/github/luttje/livewire-gloom/badge.svg?branch=main)](https://coveralls.io/github/luttje/livewire-gloom?branch=main)
+
+</div>
+
+> [!Warning]
+> This package is still in development. It is not yet ready for production use and the API may change at any time.
 
 ## Helpers
 
