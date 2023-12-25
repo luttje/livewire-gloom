@@ -60,8 +60,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          * Injects a script into the browser to wait until a Livewire commit succeeds or fails.
          * Calls an event when the commit succeeds or fails so we can wait for it.
          */
-        $waitUntilLivewireCommit = function(Browser $browser, string $method, ?array $params = null, string $succeedOrFail = 'succeed', ?Closure $callable = null)
-        {
+        $waitUntilLivewireCommit = function (Browser $browser, string $method, ?array $params = null, string $succeedOrFail = 'succeed', ?Closure $callable = null) {
             $parametersAsJson = $params != null ? json_encode($params) : 'null';
             $methodAndParamsHash = md5($method.$parametersAsJson);
 
@@ -160,8 +159,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          * Injects a script into the browser to wait until a Livewire update succeeds or fails.
          * Calls an event when the commit succeeds or fails so we can wait for it.
          */
-        $waitUntilLivewireUpdate = function(Browser $browser, array $updatedKeys = [], string $succeedOrFail = 'succeed', ?Closure $callable = null)
-        {
+        $waitUntilLivewireUpdate = function (Browser $browser, array $updatedKeys = [], string $succeedOrFail = 'succeed', ?Closure $callable = null) {
             $updatedKeysAsJson = json_encode($updatedKeys);
             $updatedKeysHash = md5($updatedKeysAsJson);
 
