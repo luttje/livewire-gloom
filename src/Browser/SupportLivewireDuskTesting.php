@@ -120,7 +120,7 @@ trait SupportLivewireDuskTesting
     public function waitUntilLivewireCommit(string $method, ?array $params = null, string $succeedOrFail = 'succeed', ?Closure $callable = null)
     {
         $parametersAsJson = $params != null ? json_encode($params) : 'null';
-        $methodAndParamsHash = md5($method . $parametersAsJson);
+        $methodAndParamsHash = md5($method.$parametersAsJson);
 
         // Inject a script that will listen for the commit hook and see if the method and parameters match the ones we're waiting for.
         // Will dispatch an event with the result.
@@ -194,7 +194,7 @@ trait SupportLivewireDuskTesting
         }
 
         // Wait for the event to be dispatched
-        $this->waitForEvent('support-livewire-dusk-testing-commit-' . $succeedOrFail . '-' . $methodAndParamsHash, 'window');
+        $this->waitForEvent('support-livewire-dusk-testing-commit-'.$succeedOrFail.'-'.$methodAndParamsHash, 'window');
 
         return $this;
     }
@@ -255,7 +255,7 @@ trait SupportLivewireDuskTesting
         }
 
         // Wait for the event to be dispatched
-        $this->waitForEvent('support-livewire-dusk-testing-update-' . $succeedOrFail . '-' . $updatedKeysHash, 'window');
+        $this->waitForEvent('support-livewire-dusk-testing-update-'.$succeedOrFail.'-'.$updatedKeysHash, 'window');
 
         return $this;
     }

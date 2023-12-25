@@ -2,8 +2,8 @@
 
 namespace Luttje\LivewireGloom\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use Luttje\LivewireGloom\LivewireGloomServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
