@@ -3,21 +3,23 @@
 namespace Luttje\LivewireGloom\Tests\Browser;
 
 use Illuminate\Support\Facades\Blade;
-use Luttje\LivewireGloom\Concerns\WithLivewireDuskTesting;
-use Luttje\LivewireGloom\LivewireGloomServiceProvider;
-use Luttje\LivewireGloom\Tests\Browser\Fixtures\IncrementComponent;
-use Orchestra\Testbench\Dusk\TestCase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\LivewireServiceProvider;
+use Luttje\LivewireGloom\Concerns\WithLivewireDuskTesting;
+use Luttje\LivewireGloom\LivewireGloomServiceProvider;
+use Luttje\LivewireGloom\Tests\Browser\Fixtures\IncrementComponent;
+use Orchestra\Testbench\Dusk\TestCase;
 
 class BrowserTestCase extends TestCase
 {
     use WithLivewireDuskTesting;
 
     public $packagePath = '';
+
     public $testsDirectory = '';
+
     public $testsNamespace = '';
 
     protected function getPackageProviders($app)
@@ -46,10 +48,11 @@ class BrowserTestCase extends TestCase
     {
         $router->get('/livewire-gloom-test', function () {
             $component = IncrementComponent::class;
+
             return Blade::render(
-                "<html><head><meta name=\"csrf-token\" content=\"{{ csrf_token() }}\" />\n@livewireStyles</head><body>\n" .
-                "@livewire(\\$component::class)\n" .
-                "@livewireScripts</body></html>"
+                "<html><head><meta name=\"csrf-token\" content=\"{{ csrf_token() }}\" />\n@livewireStyles</head><body>\n".
+                "@livewire(\\$component::class)\n".
+                '@livewireScripts</body></html>'
             );
         });
     }
@@ -89,7 +92,7 @@ class BrowserTestCase extends TestCase
     public function configureTestsDirectory()
     {
         if ($this->testsDirectory == '') {
-            $this->testsDirectory = $this->getPackagePath()."/tests";
+            $this->testsDirectory = $this->getPackagePath().'/tests';
         }
     }
 
@@ -120,7 +123,7 @@ class BrowserTestCase extends TestCase
 
     protected function isTestsNamespacePopulated()
     {
-        return isset($this->testsNamespace) && $this->testsNamespace !=  '';
+        return isset($this->testsNamespace) && $this->testsNamespace != '';
     }
 
     public function getTestComponentsClassList()
@@ -130,7 +133,7 @@ class BrowserTestCase extends TestCase
 
     protected function generateClassNameFromFile($file)
     {
-        return $this->getTestsNamespace().'\\'. Str::of($file->getRelativePathname())->before('.php')->replace('/', '\\');
+        return $this->getTestsNamespace().'\\'.Str::of($file->getRelativePathname())->before('.php')->replace('/', '\\');
     }
 
     protected function generateTestComponentsClassList()
