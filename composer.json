@@ -48,8 +48,8 @@
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/phpunit tests",
-        "test-ci": "vendor/bin/phpunit tests --coverage --ci",
-        "test-coverage": "@test --coverage",
+        "test-ci": "@test-coverage",
+        "test-coverage": "@test --coverage-clover build/logs/clover.xml",
         "format": "vendor/bin/pint"
     },
     "config": {
