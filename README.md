@@ -101,20 +101,17 @@ composer require luttje/livewire-gloom
 
 ## Usage
 
-Create a new Dusk test case and add the `Luttje\LivewireGloom\Concerns\WithLivewireDuskTesting` trait. The trait will supply a `Luttje\LivewireGloom\Browser\LivewireSupportedBrowser` for you to use:
+Create a new Dusk test case and use the macros described above:
 
 ```php
-use Luttje\LivewireGloom\Browser\LivewireSupportedBrowser;
-use Luttje\LivewireGloom\Concerns\WithLivewireDuskTesting;
+use Laravel\Dusk\Browser;
 use Tests\DuskTestCase; // Or whatever your base test case is
 
 class ExampleTest extends DuskTestCase
 {
-    use WithLivewireDuskTesting;
-
     public function testExample(): void
     {
-        $this->browse(function (LivewireSupportedBrowser $browser) {
+        $this->browse(function (Browser $browser) {
             $browser->visit('/example')
                 ->setLivewireTextValue('@name', 'John Doe')
                 ->clickAndWaitUntilLivewireCommitSucceeds('@save-button', 'save')
@@ -129,7 +126,7 @@ class ExampleTest extends DuskTestCase
 Make sure you have installed the Dusk Chrome driver by running:
 
 ```bash
-./vendor/bin/dusk-updater update
+./vendor/bin/dusk-updater detect --auto-update
 ```
 
 Then run the tests with:

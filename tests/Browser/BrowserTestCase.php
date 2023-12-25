@@ -7,15 +7,12 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\LivewireServiceProvider;
-use Luttje\LivewireGloom\Concerns\WithLivewireDuskTesting;
 use Luttje\LivewireGloom\LivewireGloomServiceProvider;
 use Luttje\LivewireGloom\Tests\Browser\Fixtures\IncrementComponent;
 use Orchestra\Testbench\Dusk\TestCase;
 
 class BrowserTestCase extends TestCase
 {
-    use WithLivewireDuskTesting;
-
     public $packagePath = '';
 
     public $testsDirectory = '';
