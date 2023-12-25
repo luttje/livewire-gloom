@@ -17,13 +17,17 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
 
     public function bootingPackage()
     {
+        $this->defineSetLivewireTextValueMacro();
+        $this->defineWaitUntilLivewireCommitMacro();
+        $this->defineWaitUntilLivewireUpdateMacro();
+    }
+
+    protected function defineSetLivewireTextValueMacro()
+    {
         Browser::macro('setLivewireTextValue', function (string $selector, string $value) {
             /** @var Browser $this */
             $this->value($selector, $value);
             $element = $this->resolver->findOrFail($selector);
-
-            //// Simulate typing a space and then backspace to trigger the 'input' event.
-            //// $element->sendKeys([' ', \Facebook\WebDriver\WebDriverKeys::BACKSPACE]);
 
             $id = $element->getAttribute('id');
 
@@ -55,7 +59,10 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
 
             return $this;
         });
+    }
 
+    protected function defineWaitUntilLivewireCommitMacro()
+    {
         /**
          * Injects a script into the browser to wait until a Livewire commit succeeds or fails.
          * Calls an event when the commit succeeds or fails so we can wait for it.
@@ -144,18 +151,31 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
 
         Browser::macro('waitUntilLivewireCommitSucceeds', function (string $method, ?array $params = null) use ($waitUntilLivewireCommit) {
             /** @var Browser $this */
-            $waitUntilLivewireCommit($method, $params, 'succeed');
+            $waitUntilLivewireCommit($this, $method, $params, 'succeed');
 
             return $this;
         });
 
         Browser::macro('waitUntilLivewireCommitFails', function (string $method, ?array $params = null) use ($waitUntilLivewireCommit) {
             /** @var Browser $this */
-            $waitUntilLivewireCommit($method, $params, 'fail');
+            $waitUntilLivewireCommit($this, $method, $params, 'fail');
 
             return $this;
         });
 
+        Browser::macro('clickAndWaitUntilLivewireCommitSucceeds', function (string $selector, string $method, ?array $params = null) use ($waitUntilLivewireCommit) {
+            /** @var Browser $this */
+            $waitUntilLivewireCommit($this, $method, $params, 'succeed', function () use ($selector) {
+                /** @var Browser $this */
+                $this->click($selector);
+            });
+
+            return $this;
+        });
+    }
+
+    protected function defineWaitUntilLivewireUpdateMacro()
+    {
         /**
          * Injects a script into the browser to wait until a Livewire update succeeds or fails.
          * Calls an event when the commit succeeds or fails so we can wait for it.
@@ -216,16 +236,6 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
 
             return $browser;
         };
-
-        Browser::macro('clickAndWaitUntilLivewireCommitSucceeds', function (string $selector, string $method, ?array $params = null) use ($waitUntilLivewireCommit) {
-            /** @var Browser $this */
-            $waitUntilLivewireCommit($this, $method, $params, 'succeed', function () use ($selector) {
-                /** @var Browser $this */
-                $this->click($selector);
-            });
-
-            return $this;
-        });
 
         Browser::macro('waitUntilLivewireUpdateSucceeds', function (array $updatedKeys = []) use ($waitUntilLivewireUpdate) {
             /** @var Browser $this */
