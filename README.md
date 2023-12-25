@@ -1,92 +1,118 @@
-# :package_description
+# Livewire Gloom
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+Add functions to Laravel Dusk for working with Livewire.
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+![Livewire Gloom](banner.png)
 
-## Support us
+## Helpers
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
+### `setLivewireTextValue`
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+*The normal `$browser->value('@name', 'John Doe')` will change the field, but Livewire won't update it since it never received an `input` event for it.*
 
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+The `setLivewireTextValue` method sets the value of a Livewire text/number input field and ensures the value is updated by dispatching an `input` event.
+
+```php
+$browser->setLivewireTextValue('@name', 'John Doe');
+```
+
+### `waitUntilLivewireCommitSucceeds`
+
+*It can be tricky to know if Livewire finished a request cycle. You can work with `$browser->pause(...)` but that's not very reliable.*
+
+The `waitUntilLivewireCommitSucceeds` method waits until Livewire finished a request cycle for the specified method (and optionally parameters).
+
+```php
+$browser->waitUntilLivewireCommitSucceeds('getLastName', ['John Doe']);
+```
+
+The above won't work if the method has no parameters, or has different parameters. If you don't care about the parameters, you can omit them.
+
+```php
+$browser->waitUntilLivewireCommitSucceeds('save');
+```
+
+### `waitUntilLivewireCommitFails`
+
+The inverse of `waitUntilLivewireCommitSucceeds`.
+
+```php
+$browser->waitUntilLivewireCommitFails('getLastName', ['John Doe']);
+// Or:
+$browser->waitUntilLivewireCommitFails('save');
+```
+
+### `clickAndWaitUntilLivewireCommitSucceeds`
+
+This sets up `waitUntilLivewireCommitSucceeds` to listen for a Livewire request cycle and clicks the element.
+
+```php
+$optionalParameters = ['John Doe']; // Optional, leave this away if you don't have parameters or wish to match any parameters
+$browser->clickAndWaitUntilLivewireCommitSucceeds('@save-button', 'save', $optionalParameters);
+```
+
+### `waitUntilLivewireUpdateSucceeds`
+
+*It can be tricky to know if Livewire finished a request cycle surrounding the updating of a property. You can work with `$browser->pause(...)` but that's not very reliable.*
+
+The `waitUntilLivewireUpdateSucceeds` method waits until Livewire finished a request cycle for the specified property keys.
+
+```php
+$browser->waitUntilLivewireUpdateSucceeds(['data.user_name']);
+```
+
+Or for multiple properties:
+
+```php
+$browser->waitUntilLivewireUpdateSucceeds(['data.user_name', 'data.user_email']);
+```
+
+With this last example the browser will wait until an update cycle is finished in which both `data.user_name` and `data.user_email` are updated.
+
+### `waitUntilLivewireUpdateFails`
+
+The inverse of `waitUntilLivewireUpdateSucceeds`.
+
+### `clickAndWaitUntilLivewireUpdateSucceeds`
+
+This sets up `waitUntilLivewireUpdateSucceeds` to listen for a Livewire request cycle and clicks the element.
+
+```php
+$browser->clickAndWaitUntilLivewireUpdateSucceeds('@save-button', ['data.user_name']);
+```
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
+composer require luttje/livewire-gloom
 ```
 
 ## Usage
 
+Create a new Dusk test case and add the `Luttje\LivewireGloom\Concerns\WithLivewireDuskTesting` trait. The trait will supply a `Luttje\LivewireGloom\Browser\LivewireSupportedBrowser` for you to use:
+
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+use Luttje\LivewireGloom\Browser\LivewireSupportedBrowser;
+use Luttje\LivewireGloom\Concerns\WithLivewireDuskTesting;
+use Tests\DuskTestCase; // Or whatever your base test case is
+
+class ExampleTest extends DuskTestCase
+{
+    use WithLivewireDuskTesting;
+
+    public function testExample(): void
+    {
+        $this->browse(function (LivewireSupportedBrowser $browser) {
+            $browser->visit('/example')
+                ->setLivewireTextValue('@name', 'John Doe')
+                ->clickAndWaitUntilLivewireCommitSucceeds('@save-button', 'save')
+                ->assertSee('Saved!');
+        });
+    }
+}
 ```
-
-## Testing
-
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [:author_name](https://github.com/:author_username)
-- [All Contributors](../../contributors)
 
 ## License
 
