@@ -114,6 +114,18 @@ class ExampleTest extends DuskTestCase
 }
 ```
 
+## Testing
+
+Make sure you have installed the Dusk Chrome driver by running:
+```bash
+./vendor/bin/dusk-updater update
+```
+
+Then run the tests with:
+```bash
+composer test
+```
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
