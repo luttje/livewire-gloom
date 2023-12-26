@@ -122,7 +122,10 @@ final class ReadmeExamplesTest extends BrowserTestCase
         Or for multiple properties:
     TEXT, footnotes: <<<'TEXT'
         With this last example the browser will wait until an update cycle is finished
-        in which both `data.user_name` and `data.user_email` are updated.
+        in which both the `age` and `job` livewire properties are updated.
+        If those properties are deferred (by default) then Livewire will wait
+        a request is made.
+        In the example above they are deferred until clicking `@split-button-debounced`.
     TEXT)]
     public function exampleWaitUntilLivewireUpdateSucceeds2(Browser $browser)
     {
@@ -203,7 +206,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
     {
         $browser->type('@name-input', 'John Doe')
             ->click('@split-button')
-            // *🚀 hyperfast save button somehow already completed a full commit here*
+            // *🚀 hyperfast split-button somehow already completed a full commit here*
             ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe']) // test fails here due to timeout
             ->assertSeeIn('@first-name', 'John');
     }
@@ -231,37 +234,44 @@ final class ReadmeExamplesTest extends BrowserTestCase
     #[ReadmeExampleDescription(<<<'TEXT'
         Because the `waitUntilLivewireCommitSucceeds` sets up the listener, it will
         miss the commit that happened before it was set up. The test will then fail
-        with a timeout.
+        with a timeout exception.
 
-        In such a situation you will want to be sure that before we start an action we
-        start listening, so we don't miss the commit:
+        In such a situation you will want to be sure that before an action is started,
+        we setup the listener. That way we don't miss the commit. To reiterate we want
+        to:
 
-        1. Set up the listener
-        2. Click the button
-        3. Wait for the listener to be triggered
-        4. Assert
+        1. **Set up the listener** for the Livewire commit
+        2. **Click the button** which triggers the Livewire commit
+        3. **Wait for the listener** to be triggered by the Livewire commit (succeeding or failing)
+        4. **Assert** now that we know the Livewire commit is finished
 
-        You can do this providing a callback that executes the action after the listener
-        is setup. The following functions support this:
+        You can ensure of the above sequence by providing a closure, which we call an
+        action. It will be executed after the listener is set up.
+        The following functions support this:
 
         - `waitUntilLivewireCommitSucceeds`
         - `waitUntilLivewireCommitFails`
         - `waitUntilLivewireUpdateSucceeds`
         - `waitUntilLivewireUpdateFails`
 
-        Here is an example how you can use this `action` parameter:
+        Here is an example how you can use this `action` parameter with
+        `waitUntilLivewireCommitSucceeds`:
     TEXT, footnotes: <<<'TEXT'
-        Internally the `clickAndWaitUntilLivewireCommitSucceeds` and
+        *Internally the `clickAndWaitUntilLivewireCommitSucceeds` and
         `clickAndWaitUntilLivewireUpdateSucceeds` functions use the `action` parameter
         to call `click` on the Browser. So the above example can be simplified by using
-        either of those functions.
+        either of those functions.*
     TEXT)]
     public function exampleAction(Browser $browser)
     {
         $browser->type('@name-input', 'John Doe')
-            ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe'], action: function () use ($browser) {
-                $browser->click('@split-button');
-            })
+            ->waitUntilLivewireCommitSucceeds(
+                'splitNameParts',
+                ['John Doe'],
+                action: function () use ($browser) {
+                    $browser->click('@split-button');
+                }
+            )
             ->assertSeeIn('@first-name', 'John');
     }
 

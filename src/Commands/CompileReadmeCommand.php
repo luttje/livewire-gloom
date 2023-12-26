@@ -9,13 +9,13 @@ use Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest;
 
 class CompileReadmeCommand extends Command
 {
-    protected $signature = 'livewire-gloom:compile-readme {outputFile?}';
+    protected $signature = 'livewire-gloom:compile-readme {output?}';
 
     protected $description = 'Compile the README.md file for the package based on attributes in the tests.';
 
     public function handle(): int
     {
-        $outputFile = realpath($this->argument('outputFile') ?? __DIR__.'/../../README.md');
+        $outputFile = realpath($this->argument('output') ?? __DIR__.'/../../README.md');
 
         $this->info("Compiling examples to {$outputFile}...");
 

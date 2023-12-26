@@ -19,7 +19,9 @@ final class CompileReadmeCommandTest extends TestCase
 
         copy(__DIR__.'/../../README.md', $outputFile);
 
-        $this->artisan('livewire-gloom:compile-readme', [$outputFile])
+        $this->artisan('livewire-gloom:compile-readme', [
+            'output' => $outputFile,
+        ])
             ->assertExitCode(0);
 
         $this->assertFileExists($outputFile);
