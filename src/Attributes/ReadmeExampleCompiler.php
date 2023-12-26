@@ -59,7 +59,13 @@ class ReadmeExampleCompiler
             $code .= file($fileName)[$lineNumber];
         }
 
-        return trim(Indentation::unindent($code), " \n\r\t\v\0{}");
+        $code = ltrim(rtrim(Indentation::unindent($code)));
+
+        // Remove { and } and any newlines before/after them
+        $code = preg_replace('/^{[\r\n]+/', '', $code);
+        $code = preg_replace('/[\r\n]+}$/', '', $code);
+
+        return Indentation::unindent($code);
     }
 
     public function getExamples(): array

@@ -41,9 +41,9 @@ request cycle for the specified method (and optionally parameters).
 
 ```php
 $browser->type('@name-input', 'John Doe')
-        ->click('@split-button-debounced')
-        ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe'])
-        ->assertSeeIn('@first-name', 'John');
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe'])
+    ->assertSeeIn('@first-name', 'John');
 ```
 
 The above call won't match the request if the call has no parameters,
@@ -52,9 +52,9 @@ you can omit them.
 
 ```php
 $browser->type('@name-input', 'John Doe')
-        ->click('@split-button-debounced')
-        ->waitUntilLivewireCommitSucceeds('splitNameParts')
-        ->assertSeeIn('@first-name', 'John');
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireCommitSucceeds('splitNameParts')
+    ->assertSeeIn('@first-name', 'John');
 ```
 
 ### `waitUntilLivewireCommitFails`
@@ -63,9 +63,9 @@ The inverse of `waitUntilLivewireCommitSucceeds`.
 
 ```php
 $browser->type('@name-input', 'John Doe')
-        ->click('@button-to-404-debounced')
-        ->waitUntilLivewireCommitFails('throws404')
-        ->assertSeeIn('@first-name', 'empty');
+    ->click('@button-to-404-debounced')
+    ->waitUntilLivewireCommitFails('throws404')
+    ->assertSeeIn('@first-name', 'empty');
 ```
 
 ### `clickAndWaitUntilLivewireCommitSucceeds`
@@ -76,9 +76,9 @@ cycle and clicks the element.
 ```php
 $optionalParameters = ['John Doe']; // Optional, leave this away if you don't have parameters or wish to match any parameters
 
-    $browser->type('@name-input', 'John Doe')
-        ->clickAndWaitUntilLivewireCommitSucceeds('@split-button-debounced', 'splitNameParts', $optionalParameters)
-        ->assertSeeIn('@first-name', 'John');
+$browser->type('@name-input', 'John Doe')
+    ->clickAndWaitUntilLivewireCommitSucceeds('@split-button-debounced', 'splitNameParts', $optionalParameters)
+    ->assertSeeIn('@first-name', 'John');
 ```
 
 ### `waitUntilLivewireUpdateSucceeds`
@@ -92,20 +92,20 @@ request cycle for the specified property keys.
 
 ```php
 $browser->type('@age-input', '42')
-        ->click('@split-button-debounced')
-        ->waitUntilLivewireUpdateSucceeds(['age'])
-        ->assertSeeIn('@age', '42');
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireUpdateSucceeds(['age'])
+    ->assertSeeIn('@age', '42');
 ```
 
 Or for multiple properties:
 
 ```php
 $browser->type('@age-input', '42')
-        ->type('@job-input', 'Plumber')
-        ->click('@split-button-debounced')
-        ->waitUntilLivewireUpdateSucceeds(['age', 'job'])
-        ->assertSeeIn('@age', '42')
-        ->assertSeeIn('@job', 'Plumber');
+    ->type('@job-input', 'Plumber')
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireUpdateSucceeds(['age', 'job'])
+    ->assertSeeIn('@age', '42')
+    ->assertSeeIn('@job', 'Plumber');
 ```
 
 With this last example the browser will wait until an update cycle is finished
@@ -117,9 +117,9 @@ The inverse of `waitUntilLivewireUpdateSucceeds`.
 
 ```php
 $browser->type('@age-input', '42')
-        ->click('@button-to-404-debounced')
-        ->waitUntilLivewireUpdateFails(['age'])
-        ->assertSeeIn('@age', '-1');
+    ->click('@button-to-404-debounced')
+    ->waitUntilLivewireUpdateFails(['age'])
+    ->assertSeeIn('@age', '-1');
 ```
 
 ### `clickAndWaitUntilLivewireUpdateSucceeds`
@@ -129,8 +129,8 @@ cycle and clicks the element.
 
 ```php
 $browser->type('@age-input', '42')
-        ->clickAndWaitUntilLivewireUpdateSucceeds('@split-button-debounced', ['age'])
-        ->assertSeeIn('@age', '42');
+    ->clickAndWaitUntilLivewireUpdateSucceeds('@split-button-debounced', ['age'])
+    ->assertSeeIn('@age', '42');
 ```
 
 ### The `action` parameter
@@ -140,10 +140,10 @@ Livewire commit or update:
 
 ```php
 $browser->type('@name-input', 'John Doe')
-        ->click('@split-button')
-        // *🚀 hyperfast save button somehow already completed a full commit here*
-        ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe']) // test fails here due to timeout
-        ->assertSeeIn('@first-name', 'John');
+    ->click('@split-button')
+    // *🚀 hyperfast save button somehow already completed a full commit here*
+    ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe']) // test fails here due to timeout
+    ->assertSeeIn('@first-name', 'John');
 ```
 
 Because the `waitUntilLivewireCommitSucceeds` sets up the listener, it will
@@ -170,10 +170,10 @@ Here is an example how you can use this `action` parameter:
 
 ```php
 $browser->type('@name-input', 'John Doe')
-        ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe'], action: function () use ($browser) {
-            $browser->click('@split-button');
-        })
-        ->assertSeeIn('@first-name', 'John');
+    ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe'], action: function () use ($browser) {
+        $browser->click('@split-button');
+    })
+    ->assertSeeIn('@first-name', 'John');
 ```
 
 Internally the `clickAndWaitUntilLivewireCommitSucceeds` and
