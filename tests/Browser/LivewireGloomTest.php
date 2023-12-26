@@ -89,15 +89,4 @@ final class LivewireGloomTest extends BrowserTestCase
                 ->assertSeeIn('@last-name', 'Doe');
         });
     }
-
-    public function testCanSetLivewireTextValue(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(route('livewire-gloom.component', IncrementComponent::class, false))
-                ->waitUntilLivewireUpdateSucceeds(['count'], function () use ($browser) {
-                    $browser->setLivewireTextValue('@input', '42');
-                })
-                ->assertSeeIn('@output', '42');
-        });
-    }
 }

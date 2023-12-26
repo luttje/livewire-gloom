@@ -15,31 +15,6 @@ use Luttje\LivewireGloom\Tests\Browser\Fixtures\NameComponent;
  */
 final class ReadmeExamplesTest extends BrowserTestCase
 {
-    #[ReadmeExample('`setLivewireTextValue`')]
-    #[ReadmeExampleDescription(<<<'TEXT'
-        *The normal `$browser->value('@name', 'John Doe')` will change the field,
-        but Livewire won't update it since it never received an `input` event for it.*
-    TEXT)]
-    #[ReadmeExampleDescription(<<<'TEXT'
-        The `setLivewireTextValue` method sets the value of a Livewire text/number input
-        field and ensures the value is updated by dispatching an `input` event.
-    TEXT)]
-    public function exampleSetLivewireTextValue(Browser $browser)
-    {
-        $browser->setLivewireTextValue('@input', '42');
-    }
-
-    public function testCanSetLivewireTextValue(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(route('livewire-gloom.component', IncrementComponent::class, false))
-                ->waitUntilLivewireUpdateSucceeds(['count'], function () use ($browser) {
-                    static::exampleSetLivewireTextValue($browser);
-                })
-                ->assertSeeIn('@output', '42');
-        });
-    }
-
     #[ReadmeExample('`waitUntilLivewireCommitSucceeds`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         *It can be tricky to know if Livewire finished a request cycle. You can work

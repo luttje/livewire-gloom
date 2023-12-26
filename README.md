@@ -16,7 +16,7 @@ Add functions to Laravel Dusk for working with Livewire.
 
 ## Provided macros
 
-The examples below assume these Livewire components found in the `tests` folder:
+The examples below assume the following Livewire components (found in the `tests/Browser/Fixtures/` directory):
 
 - [`IncrementComponent`](tests/Browser/Fixtures/IncrementComponent.php)
 - [`NameComponent`](tests/Browser/Fixtures/NameComponent.php)
@@ -30,18 +30,6 @@ in the tests.
 
 Do not edit this section manually or your changes will be overwritten.
 -->
-
-### `setLivewireTextValue`
-
-*The normal `$browser->value('@name', 'John Doe')` will change the field,
-but Livewire won't update it since it never received an `input` event for it.*
-
-The `setLivewireTextValue` method sets the value of a Livewire text/number input
-field and ensures the value is updated by dispatching an `input` event.
-
-```php
-$browser->setLivewireTextValue('@input', '42');
-```
 
 ### `waitUntilLivewireCommitSucceeds`
 
@@ -224,7 +212,7 @@ class ExampleTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/example')
-                ->setLivewireTextValue('@name', 'John Doe')
+                ->type('@name', 'John Doe')
                 ->clickAndWaitUntilLivewireCommitSucceeds('@save-button', 'save')
                 ->assertSee('Saved!');
         });

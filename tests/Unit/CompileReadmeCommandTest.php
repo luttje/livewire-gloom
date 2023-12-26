@@ -11,9 +11,19 @@ final class CompileReadmeCommandTest extends TestCase
 {
     public function testCanCompileReadme(): void
     {
-        $this->artisan('livewire-gloom:compile-readme')
+        $outputFile = __DIR__.'/../../build/README-tmp.md';
+
+        if (! is_dir(dirname($outputFile))) {
+            mkdir(dirname($outputFile), 0777, true);
+        }
+
+        copy(__DIR__.'/../../README.md', $outputFile);
+
+        $this->artisan('livewire-gloom:compile-readme', [$outputFile])
             ->assertExitCode(0);
 
-        $this->assertFileExists(__DIR__.'/../../README.md');
+        $this->assertFileExists($outputFile);
+
+        unlink($outputFile);
     }
 }

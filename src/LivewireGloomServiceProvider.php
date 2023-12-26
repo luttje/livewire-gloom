@@ -19,48 +19,8 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
 
     public function bootingPackage()
     {
-        $this->defineSetLivewireTextValueMacro();
         $this->defineWaitUntilLivewireCommitMacro();
         $this->defineWaitUntilLivewireUpdateMacro();
-    }
-
-    protected function defineSetLivewireTextValueMacro()
-    {
-        Browser::macro('setLivewireTextValue', function (string $selector, string $value) {
-            /** @var Browser $this */
-            $this->value($selector, $value);
-            $element = $this->resolver->findOrFail($selector);
-
-            $id = $element->getAttribute('id');
-
-            if ($id) {
-                $selector = <<<JS
-                    const element = document.querySelector('#' + CSS.escape('$id'));
-                JS;
-            } else {
-                $duskSelector = $element->getAttribute('dusk');
-
-                if ($duskSelector) {
-                    $selector = <<<JS
-                        const element = document.querySelector('[dusk="' + CSS.escape('$duskSelector') + '"]');
-                    JS;
-                } else {
-                    throw new \Exception('Could not find an ID or dusk attribute on the element. Cannot set value for Livewire.');
-                }
-            }
-
-            $this->script(<<<JS
-                $selector
-                const event = new Event('input', {
-                    bubbles: true,
-                    cancelable: true,
-                });
-
-                element.dispatchEvent(event);
-            JS);
-
-            return $this;
-        });
     }
 
     protected function defineWaitUntilLivewireCommitMacro()
