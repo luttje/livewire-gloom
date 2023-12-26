@@ -5,7 +5,6 @@ namespace Luttje\LivewireGloom\Tests\Browser;
 use Laravel\Dusk\Browser;
 use Luttje\LivewireGloom\Attributes\ReadmeExample;
 use Luttje\LivewireGloom\Attributes\ReadmeExampleDescription;
-use Luttje\LivewireGloom\Tests\Browser\Fixtures\IncrementComponent;
 use Luttje\LivewireGloom\Tests\Browser\Fixtures\NameComponent;
 
 /**
