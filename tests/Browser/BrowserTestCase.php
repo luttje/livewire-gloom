@@ -5,6 +5,7 @@ namespace Luttje\LivewireGloom\Tests\Browser;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Laravel\Dusk\Browser;
 use Livewire\Component;
 use Livewire\LivewireServiceProvider;
 use Luttje\LivewireGloom\LivewireGloomServiceProvider;
@@ -71,6 +72,15 @@ class BrowserTestCase extends TestCase
             $testComponents->each(function ($componentClass) {
                 app('livewire')->component($componentClass);
             });
+
+            $inContinuousIntegrationEnvironment = env('RUNNING_IN_CI', false);
+
+            // Give CI tests a bit more time before failing. This is especially
+            // because of the GitHub Actions environment, which is a bit slow.
+            // (Possibly because we run a bunch of tests in parallel.)
+            if ($inContinuousIntegrationEnvironment) {
+                Browser::$waitSeconds = 20;
+            }
         });
     }
 
