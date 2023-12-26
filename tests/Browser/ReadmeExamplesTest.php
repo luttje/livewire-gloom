@@ -15,7 +15,7 @@ use Luttje\LivewireGloom\Tests\Browser\Fixtures\NameComponent;
  */
 final class ReadmeExamplesTest extends BrowserTestCase
 {
-    #[ReadmeExample('setLivewireTextValue')]
+    #[ReadmeExample('`setLivewireTextValue`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         *The normal `$browser->value('@name', 'John Doe')` will change the field,
         but Livewire won't update it since it never received an `input` event for it.*
@@ -40,7 +40,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    #[ReadmeExample('waitUntilLivewireCommitSucceeds')]
+    #[ReadmeExample('`waitUntilLivewireCommitSucceeds`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         *It can be tricky to know if Livewire finished a request cycle. You can work
         with `$browser->pause(...)` but that's not very reliable.*
@@ -57,7 +57,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@first-name', 'John');
     }
 
-    #[ReadmeExample('waitUntilLivewireCommitSucceeds')]
+    #[ReadmeExample('`waitUntilLivewireCommitSucceeds`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         The above call won't match the request if the call has no parameters,
         or has different parameters. If you don't care about the parameters,
@@ -81,7 +81,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    #[ReadmeExample('waitUntilLivewireCommitFails')]
+    #[ReadmeExample('`waitUntilLivewireCommitFails`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         The inverse of `waitUntilLivewireCommitSucceeds`.
     TEXT)]
@@ -102,7 +102,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    #[ReadmeExample('clickAndWaitUntilLivewireCommitSucceeds')]
+    #[ReadmeExample('`clickAndWaitUntilLivewireCommitSucceeds`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         This sets up `waitUntilLivewireCommitSucceeds` to listen for a Livewire request
         cycle and clicks the element.
@@ -125,7 +125,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    #[ReadmeExample('waitUntilLivewireUpdateSucceeds')]
+    #[ReadmeExample('`waitUntilLivewireUpdateSucceeds`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         *It can be tricky to know if Livewire finished a request cycle surrounding the
         updating of a property. You can work with `$browser->pause(...)` but that's not
@@ -143,7 +143,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@age', '42');
     }
 
-    #[ReadmeExample('waitUntilLivewireUpdateSucceeds')]
+    #[ReadmeExample('`waitUntilLivewireUpdateSucceeds`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         Or for multiple properties:
     TEXT, footnotes: <<<'TEXT'
@@ -178,7 +178,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    #[ReadmeExample('waitUntilLivewireUpdateFails')]
+    #[ReadmeExample('`waitUntilLivewireUpdateFails`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         The inverse of `waitUntilLivewireUpdateSucceeds`.
     TEXT)]
@@ -199,7 +199,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    #[ReadmeExample('clickAndWaitUntilLivewireUpdateSucceeds')]
+    #[ReadmeExample('`clickAndWaitUntilLivewireUpdateSucceeds`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         This sets up `waitUntilLivewireUpdateSucceeds` to listen for a Livewire request
         cycle and clicks the element.
@@ -220,7 +220,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    #[ReadmeExample('action')]
+    #[ReadmeExample('The `action` parameter')]
     #[ReadmeExampleDescription(<<<'TEXT'
         Sometimes a sequence of actions may trigger too fast for you to listen for a
         Livewire commit or update:
@@ -253,7 +253,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    #[ReadmeExample('action')]
+    #[ReadmeExample('The `action` parameter')]
     #[ReadmeExampleDescription(<<<'TEXT'
         Because the `waitUntilLivewireCommitSucceeds` sets up the listener, it will
         miss the commit that happened before it was set up. The test will then fail

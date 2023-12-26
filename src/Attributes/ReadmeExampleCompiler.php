@@ -82,7 +82,7 @@ class ReadmeExampleCompiler
     {
         $markdown = '';
 
-        $markdown .= "\n\n### `{$name}`";
+        $markdown .= "\n\n### {$name}";
 
         foreach ($examples as $example) {
             $footnotes = '';
@@ -93,7 +93,7 @@ class ReadmeExampleCompiler
 
                 if ($description->footnotes) {
                     $footnotesText = Indentation::unindent($description->footnotes);
-                    $footnotes .= "\n\n{$footnotesText}";
+                    $footnotes .= "{$footnotesText}";
                 }
             }
 
