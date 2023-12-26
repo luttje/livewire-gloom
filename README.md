@@ -16,6 +16,7 @@ Add functions to Laravel Dusk for working with Livewire.
 
 ## Helpers
 
+<!-- #EXAMPLES_START -->
 ### `setLivewireTextValue`
 
 *The normal `$browser->value('@name', 'John Doe')` will change the field, but Livewire won't update it since it never received an `input` event for it.*
@@ -127,6 +128,7 @@ $browser->waitUntilLivewireCommitSucceeds('save', action: function () use ($brow
 ```
 
 *Internally the `clickAndWaitUntilLivewireCommitSucceeds` and `clickAndWaitUntilLivewireUpdateSucceeds` functions use the `action` parameter to call `click` on the Browser. So the above example can be simplified by using either of those functions*
+<!-- #EXAMPLES_END -->
 
 ## Installation
 

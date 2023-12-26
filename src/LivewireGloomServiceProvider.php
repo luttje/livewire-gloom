@@ -4,6 +4,7 @@ namespace Luttje\LivewireGloom;
 
 use Closure;
 use Laravel\Dusk\Browser;
+use Luttje\LivewireGloom\Commands\CompileReadmeCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -12,7 +13,8 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('livewire-gloom');
+            ->name('livewire-gloom')
+            ->hasCommand(CompileReadmeCommand::class);
     }
 
     public function bootingPackage()
@@ -69,7 +71,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          */
         $waitUntilLivewireCommit = function (Browser $browser, string $method, ?array $params = null, string $succeedOrFail = 'succeed', ?Closure $action = null) {
             $parametersAsJson = $params != null ? json_encode($params) : 'null';
-            $methodAndParamsHash = md5($method.$parametersAsJson);
+            $methodAndParamsHash = md5($succeedOrFail.$method.$parametersAsJson);
 
             // Inject a script that will listen for the commit hook and see if the method and parameters match the ones we're waiting for.
             // Will dispatch an event with the result.
@@ -128,6 +130,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
                     });
 
                     fail(() => {
+                        console.error('fail called', method, params, 'support-livewire-dusk-testing-commit-succeed-$methodAndParamsHash');
                         window.dispatchEvent(new CustomEvent('support-livewire-dusk-testing-commit-fail-$methodAndParamsHash', {
                             detail: {
                                 method,
@@ -188,7 +191,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          */
         $waitUntilLivewireUpdate = function (Browser $browser, array $updatedKeys = [], string $succeedOrFail = 'succeed', ?Closure $action = null) {
             $updatedKeysAsJson = json_encode($updatedKeys);
-            $updatedKeysHash = md5($updatedKeysAsJson);
+            $updatedKeysHash = md5($succeedOrFail.$updatedKeysAsJson);
 
             // Inject a script that will listen for the update hook and see if the updated keys match the ones we're waiting for.
             // Will dispatch an event with the result.
