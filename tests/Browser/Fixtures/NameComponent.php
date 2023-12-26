@@ -7,7 +7,9 @@ use Livewire\Component;
 class NameComponent extends Component
 {
     public $age = -1;
+
     public $firstName = '';
+
     public $lastName = '';
 
     public function splitNameParts($name)
