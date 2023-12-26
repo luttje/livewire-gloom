@@ -9,7 +9,6 @@ use Laravel\Dusk\Browser;
 use Livewire\Component;
 use Livewire\LivewireServiceProvider;
 use Luttje\LivewireGloom\LivewireGloomServiceProvider;
-use Luttje\LivewireGloom\Tests\Browser\Fixtures\IncrementComponent;
 use Orchestra\Testbench\Dusk\TestCase;
 
 class BrowserTestCase extends TestCase
@@ -34,6 +33,7 @@ class BrowserTestCase extends TestCase
 
         $app['config']->set('app.env', env('APP_ENV', 'testing'));
         $app['config']->set('app.debug', env('APP_DEBUG', true));
+        $app['config']->set('app.url', $this->baseUrl());
     }
 
     /**
@@ -44,15 +44,15 @@ class BrowserTestCase extends TestCase
      */
     protected function defineWebRoutes($router)
     {
-        $router->get('/livewire-gloom-test', function () {
-            $component = IncrementComponent::class;
+        $router->get('/livewire-gloom-component/{component}', function ($component) {
+            $class = urldecode($component);
 
             return Blade::render(
                 "<html><head><meta name=\"csrf-token\" content=\"{{ csrf_token() }}\" />\n@livewireStyles</head><body>\n".
-                "@livewire(\\$component::class)\n".
+                "@livewire(\\$class::class)\n".
                 '@livewireScripts</body></html>'
             );
-        });
+        })->name('livewire-gloom.component');
     }
 
     protected function setUp(): void
