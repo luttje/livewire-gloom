@@ -20,12 +20,12 @@ Add functions to Laravel Dusk for working with Livewire.
 
 <!-- #EXAMPLES_START -->
 <!--
-WARNING!
+    WARNING!
 
-The contents up until #EXAMPLES_END are auto-generated based on attributes
-in the tests.
+    The contents up until #EXAMPLES_END are auto-generated based on attributes
+    in the tests.
 
-Do not edit this section manually or your changes will be overwritten.
+    Do not edit this section manually or your changes will be overwritten.
 -->
 
 ### `waitUntilLivewireCommitSucceeds`

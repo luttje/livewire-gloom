@@ -4,7 +4,6 @@ namespace Luttje\LivewireGloom;
 
 use Closure;
 use Laravel\Dusk\Browser;
-use Luttje\LivewireGloom\Commands\CompileReadmeCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -13,8 +12,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('livewire-gloom')
-            ->hasCommand(CompileReadmeCommand::class);
+            ->name('livewire-gloom');
     }
 
     public function bootingPackage()

@@ -3,8 +3,8 @@
 namespace Luttje\LivewireGloom\Tests\Browser;
 
 use Laravel\Dusk\Browser;
-use Luttje\LivewireGloom\Attributes\ReadmeExample;
-use Luttje\LivewireGloom\Attributes\ReadmeExampleDescription;
+use Luttje\ExampleTester\Attributes\ReadmeExample;
+use Luttje\ExampleTester\Attributes\ReadmeExampleDescription;
 use Luttje\LivewireGloom\Tests\Browser\Fixtures\NameComponent;
 
 /**
@@ -120,7 +120,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
     #[ReadmeExample('`waitUntilLivewireUpdateSucceeds`')]
     #[ReadmeExampleDescription(<<<'TEXT'
         Or for multiple properties:
-    TEXT, footnotes: <<<'TEXT'
+    TEXT, footer: <<<'TEXT'
         With this last example the browser will wait until an update cycle is finished
         in which both the `age` and `job` livewire properties are updated.
         If those properties are deferred (by default) then Livewire will wait
@@ -256,7 +256,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
 
         Here is an example how you can use this `action` parameter with
         `waitUntilLivewireCommitSucceeds`:
-    TEXT, footnotes: <<<'TEXT'
+    TEXT, footer: <<<'TEXT'
         *Internally the `clickAndWaitUntilLivewireCommitSucceeds` and
         `clickAndWaitUntilLivewireUpdateSucceeds` functions use the `action` parameter
         to call `click` on the Browser. So the above example can be simplified by using

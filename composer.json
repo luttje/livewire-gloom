@@ -25,6 +25,7 @@
         "larastan/larastan": "^2.0.1",
         "laravel/dusk": "^7.0.0",
         "laravel/pint": "^1.0",
+        "luttje/php-example-tester": "0.1.0",
         "nunomaduro/collision": "^7.9",
         "orchestra/testbench": ">=8.18.0 <8.19.0",
         "orchestra/testbench-dusk": "^8.18",
@@ -48,7 +49,7 @@
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "analyse": "vendor/bin/phpstan analyse",
-        "compile-readme": "vendor/bin/testbench livewire-gloom:compile-readme",
+        "compile-readme": "vendor/bin/example-tester compile \\Luttje\\LivewireGloom\\Tests\\Browser",
         "test": "vendor/bin/phpunit tests",
         "test-ci": "@test-coverage",
         "test-coverage": "@test --coverage-clover build/logs/clover.xml",
