@@ -59,6 +59,7 @@ jobs:
         env:
           RUNNING_IN_CI: true
         with:
+          timeout_minutes: 4
           max_attempts: 3
           command: composer test-ci
 
