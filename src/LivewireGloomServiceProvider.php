@@ -136,6 +136,13 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
                         }));
                     });
                 });
+
+                window.__livewire_gloom_hooks = window.__livewire_gloom_hooks || [];
+                window.__livewire_gloom_hooks.push('commit-$methodAndParamsHash');
+            JS);
+
+            $browser->waitUntil(<<<JS
+                window.__livewire_gloom_hooks && window.__livewire_gloom_hooks.includes('commit-$methodAndParamsHash')
             JS);
 
             if ($callable) {
@@ -223,6 +230,13 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
                         }));
                     });
                 });
+
+                window.__livewire_gloom_hooks = window.__livewire_gloom_hooks || [];
+                window.__livewire_gloom_hooks.push('update-$updatedKeysHash');
+            JS);
+
+            $browser->waitUntil(<<<JS
+                window.__livewire_gloom_hooks && window.__livewire_gloom_hooks.includes('update-$updatedKeysHash')
             JS);
 
             if ($callable) {
