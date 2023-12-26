@@ -91,6 +91,43 @@ This sets up `waitUntilLivewireUpdateSucceeds` to listen for a Livewire request 
 $browser->clickAndWaitUntilLivewireUpdateSucceeds('@save-button', ['data.user_name']);
 ```
 
+### The `action` parameter
+
+Sometimes a sequence of actions may trigger too fast for you to listen for a Livewire commit or update:
+
+```php
+$browser->click('@save-button')
+    // *🚀 hyperfast save button somehow already completed a full commit here*
+    ->waitUntilLivewireCommitSucceeds('save') // test fails here
+    ->assertSee('Saved!');
+```
+
+Because the `waitUntilLivewireCommitSucceeds` sets up the listener, it will miss the commit that happened before it was set up. The test will then fail with a timeout.
+
+In such a situation you will want to be sure that before we start an action we start listening, so we don't miss the commit:
+
+1. Set up the listener
+2. Click the button
+3. Wait for the listener to be triggered
+4. Assert
+
+You can do this providing a callback that executes the action after the listener is setup. The following functions support this:
+
+- `waitUntilLivewireCommitSucceeds`
+- `waitUntilLivewireCommitFails`
+- `waitUntilLivewireUpdateSucceeds`
+- `waitUntilLivewireUpdateFails`
+
+Here is an example how you can use this `action` parameter:
+
+```php
+$browser->waitUntilLivewireCommitSucceeds('save', action: function () use ($browser) {
+    $browser->click('@save-button');
+});
+```
+
+*Internally the `clickAndWaitUntilLivewireCommitSucceeds` and `clickAndWaitUntilLivewireUpdateSucceeds` functions use the `action` parameter to call `click` on the Browser. So the above example can be simplified by using either of those functions*
+
 ## Installation
 
 You can install the package via composer:

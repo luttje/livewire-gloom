@@ -19,6 +19,7 @@ class IncrementComponent extends Component
             <div>
                 <button dusk="increment-button" wire:click="increment">Click me</button>
                 <div dusk="output">{{ $count }}</div>
+                <input dusk="input" wire:model.live="count" />
             </div>
         HTML;
     }

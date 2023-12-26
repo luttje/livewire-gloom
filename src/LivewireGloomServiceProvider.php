@@ -67,7 +67,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          * Injects a script into the browser to wait until a Livewire commit succeeds or fails.
          * Calls an event when the commit succeeds or fails so we can wait for it.
          */
-        $waitUntilLivewireCommit = function (Browser $browser, string $method, ?array $params = null, string $succeedOrFail = 'succeed', ?Closure $callable = null) {
+        $waitUntilLivewireCommit = function (Browser $browser, string $method, ?array $params = null, string $succeedOrFail = 'succeed', ?Closure $action = null) {
             $parametersAsJson = $params != null ? json_encode($params) : 'null';
             $methodAndParamsHash = md5($method.$parametersAsJson);
 
@@ -145,8 +145,8 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
                 window.__livewire_gloom_hooks && window.__livewire_gloom_hooks.includes('commit-$methodAndParamsHash')
             JS);
 
-            if ($callable) {
-                $callable();
+            if ($action) {
+                $action();
             }
 
             // Wait for the event to be dispatched
@@ -155,16 +155,16 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
             return $browser;
         };
 
-        Browser::macro('waitUntilLivewireCommitSucceeds', function (string $method, ?array $params = null) use ($waitUntilLivewireCommit) {
+        Browser::macro('waitUntilLivewireCommitSucceeds', function (string $method, ?array $params = null, ?Closure $action = null) use ($waitUntilLivewireCommit) {
             /** @var Browser $this */
-            $waitUntilLivewireCommit($this, $method, $params, 'succeed');
+            $waitUntilLivewireCommit($this, $method, $params, 'succeed', $action);
 
             return $this;
         });
 
-        Browser::macro('waitUntilLivewireCommitFails', function (string $method, ?array $params = null) use ($waitUntilLivewireCommit) {
+        Browser::macro('waitUntilLivewireCommitFails', function (string $method, ?array $params = null, ?Closure $action = null) use ($waitUntilLivewireCommit) {
             /** @var Browser $this */
-            $waitUntilLivewireCommit($this, $method, $params, 'fail');
+            $waitUntilLivewireCommit($this, $method, $params, 'fail', $action);
 
             return $this;
         });
@@ -186,7 +186,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          * Injects a script into the browser to wait until a Livewire update succeeds or fails.
          * Calls an event when the commit succeeds or fails so we can wait for it.
          */
-        $waitUntilLivewireUpdate = function (Browser $browser, array $updatedKeys = [], string $succeedOrFail = 'succeed', ?Closure $callable = null) {
+        $waitUntilLivewireUpdate = function (Browser $browser, array $updatedKeys = [], string $succeedOrFail = 'succeed', ?Closure $action = null) {
             $updatedKeysAsJson = json_encode($updatedKeys);
             $updatedKeysHash = md5($updatedKeysAsJson);
 
@@ -239,8 +239,8 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
                 window.__livewire_gloom_hooks && window.__livewire_gloom_hooks.includes('update-$updatedKeysHash')
             JS);
 
-            if ($callable) {
-                $callable();
+            if ($action) {
+                $action();
             }
 
             // Wait for the event to be dispatched
@@ -249,16 +249,16 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
             return $browser;
         };
 
-        Browser::macro('waitUntilLivewireUpdateSucceeds', function (array $updatedKeys = []) use ($waitUntilLivewireUpdate) {
+        Browser::macro('waitUntilLivewireUpdateSucceeds', function (array $updatedKeys = [], ?Closure $action = null) use ($waitUntilLivewireUpdate) {
             /** @var Browser $this */
-            $waitUntilLivewireUpdate($this, $updatedKeys, 'succeed');
+            $waitUntilLivewireUpdate($this, $updatedKeys, 'succeed', $action);
 
             return $this;
         });
 
-        Browser::macro('waitUntilLivewireUpdateFails', function (array $updatedKeys = []) use ($waitUntilLivewireUpdate) {
+        Browser::macro('waitUntilLivewireUpdateFails', function (array $updatedKeys = [], ?Closure $action = null) use ($waitUntilLivewireUpdate) {
             /** @var Browser $this */
-            $waitUntilLivewireUpdate($this, $updatedKeys, 'fail');
+            $waitUntilLivewireUpdate($this, $updatedKeys, 'fail', $action);
 
             return $this;
         });
