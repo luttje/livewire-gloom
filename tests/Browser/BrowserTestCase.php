@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\LivewireServiceProvider;
 use Luttje\LivewireGloom\LivewireGloomServiceProvider;
+use Luttje\LivewireGloom\Tests\Browser\Fixtures\NameComponent;
 use Orchestra\Testbench\Dusk\TestCase;
 
 class BrowserTestCase extends TestCase
@@ -52,6 +53,8 @@ class BrowserTestCase extends TestCase
                 '@livewireScripts</body></html>'
             );
         })->name('livewire-gloom.component');
+
+        $router->redirect('/example', '/livewire-gloom-component/'.urlencode(NameComponent::class));
     }
 
     protected function setUp(): void

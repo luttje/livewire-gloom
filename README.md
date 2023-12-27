@@ -18,16 +18,6 @@ Add functions to Laravel Dusk for working with Livewire.
 
 *The examples below test the [`NameComponent`](tests/Browser/Fixtures/NameComponent.php) Livewire component.*
 
-<!-- #EXAMPLES_START -->
-<!--
-    WARNING!
-
-    The contents up until #EXAMPLES_END are auto-generated based on attributes
-    in the tests.
-
-    Do not edit this section manually or your changes will be overwritten.
--->
-
 ### `waitUntilLivewireCommitSucceeds`
 
 *It can be tricky to know if Livewire finished a request cycle. You can work
@@ -36,47 +26,34 @@ with `$browser->pause(...)` but that's not very reliable.*
 The `waitUntilLivewireCommitSucceeds` method waits until Livewire finished a
 request cycle for the specified method (and optionally parameters).
 
-```php
-$browser->type('@name-input', 'John Doe')
-    ->click('@split-button-debounced')
-    ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe'])
-    ->assertSeeIn('@first-name', 'John');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireCommitSucceeds1 -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 The above call won't match the request if the call has no parameters,
 or has different parameters. If you don't care about the parameters,
 you can omit them.
 
-```php
-$browser->type('@name-input', 'John Doe')
-    ->click('@split-button-debounced')
-    ->waitUntilLivewireCommitSucceeds('splitNameParts')
-    ->assertSeeIn('@first-name', 'John');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireCommitSucceeds2 -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 ### `waitUntilLivewireCommitFails`
 
 The inverse of `waitUntilLivewireCommitSucceeds`.
 
-```php
-$browser->type('@name-input', 'John Doe')
-    ->click('@button-to-404-debounced')
-    ->waitUntilLivewireCommitFails('throws404')
-    ->assertSeeIn('@first-name', 'empty');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireCommitFails -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 ### `clickAndWaitUntilLivewireCommitSucceeds`
 
 This sets up `waitUntilLivewireCommitSucceeds` to listen for a Livewire request
 cycle and clicks the element.
 
-```php
-$optionalParameters = ['John Doe']; // Optional, leave this away if you don't have parameters or wish to match any parameters
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleClickAndWaitUntilLivewireCommitSucceeds -->
 
-$browser->type('@name-input', 'John Doe')
-    ->clickAndWaitUntilLivewireCommitSucceeds('@split-button-debounced', 'splitNameParts', $optionalParameters)
-    ->assertSeeIn('@first-name', 'John');
-```
+<!-- #EXAMPLE_COPY_END -->
 
 ### `waitUntilLivewireUpdateSucceeds`
 
@@ -87,23 +64,15 @@ very reliable.*
 The `waitUntilLivewireUpdateSucceeds` method waits until Livewire finished a
 request cycle for the specified property keys.
 
-```php
-$browser->type('@age-input', '42')
-    ->click('@split-button-debounced')
-    ->waitUntilLivewireUpdateSucceeds(['age'])
-    ->assertSeeIn('@age', '42');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireUpdateSucceeds1 -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 Or for multiple properties:
 
-```php
-$browser->type('@age-input', '42')
-    ->type('@job-input', 'Plumber')
-    ->click('@split-button-debounced')
-    ->waitUntilLivewireUpdateSucceeds(['age', 'job'])
-    ->assertSeeIn('@age', '42')
-    ->assertSeeIn('@job', 'Plumber');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireUpdateSucceeds2 -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 With this last example the browser will wait until an update cycle is finished
 in which both the `age` and `job` livewire properties are updated.
@@ -115,36 +84,27 @@ In the example above they are deferred until clicking `@split-button-debounced`.
 
 The inverse of `waitUntilLivewireUpdateSucceeds`.
 
-```php
-$browser->type('@age-input', '42')
-    ->click('@button-to-404-debounced')
-    ->waitUntilLivewireUpdateFails(['age'])
-    ->assertSeeIn('@age', '-1');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireUpdateFails -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 ### `clickAndWaitUntilLivewireUpdateSucceeds`
 
 This sets up `waitUntilLivewireUpdateSucceeds` to listen for a Livewire request
 cycle and clicks the element.
 
-```php
-$browser->type('@age-input', '42')
-    ->clickAndWaitUntilLivewireUpdateSucceeds('@split-button-debounced', ['age'])
-    ->assertSeeIn('@age', '42');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleClickAndWaitUntilLivewireUpdateSucceeds -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 ### The `action` parameter
 
 Sometimes a sequence of actions may trigger too fast for you to listen for a
 Livewire commit or update:
 
-```php
-$browser->type('@name-input', 'John Doe')
-    ->click('@split-button')
-    // *🚀 hyperfast split-button somehow already completed a full commit here*
-    ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe']) // test fails here due to timeout
-    ->assertSeeIn('@first-name', 'John');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleActionFailing -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 Because the `waitUntilLivewireCommitSucceeds` sets up the listener, it will
 miss the commit that happened before it was set up. The test will then fail
@@ -171,17 +131,9 @@ The following functions support this:
 Here is an example how you can use this `action` parameter with
 `waitUntilLivewireCommitSucceeds`:
 
-```php
-$browser->type('@name-input', 'John Doe')
-    ->waitUntilLivewireCommitSucceeds(
-        'splitNameParts',
-        ['John Doe'],
-        action: function () use ($browser) {
-            $browser->click('@split-button');
-        }
-    )
-    ->assertSeeIn('@first-name', 'John');
-```
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleAction -->
+
+<!-- #EXAMPLE_COPY_END -->
 
 *Internally the `clickAndWaitUntilLivewireCommitSucceeds` and
 `clickAndWaitUntilLivewireUpdateSucceeds` functions use the `action` parameter
@@ -209,23 +161,9 @@ composer require luttje/livewire-gloom
 
 Create a new Dusk test case and use the macros described above:
 
-```php
-use Laravel\Dusk\Browser;
-use Tests\DuskTestCase; // Or whatever your base test case is
+<!-- #EXAMPLE_COPY_START = \Luttje\ExampleTester\Tests\ExampleTest::testExample -->
 
-class ExampleTest extends DuskTestCase
-{
-    public function testExample(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/example')
-                ->type('@name', 'John Doe')
-                ->clickAndWaitUntilLivewireCommitSucceeds('@save-button', 'save')
-                ->assertSee('Saved!');
-        });
-    }
-}
-```
+<!-- #EXAMPLE_COPY_END -->
 
 ## Testing
 
