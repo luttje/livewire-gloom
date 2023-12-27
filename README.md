@@ -28,6 +28,13 @@ request cycle for the specified method (and optionally parameters).
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireCommitSucceeds1 -->
 
+```php
+$browser->type('@name-input', 'John Doe')
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe'])
+    ->assertSeeIn('@first-name', 'John');
+```
+
 <!-- #EXAMPLE_COPY_END -->
 
 The above call won't match the request if the call has no parameters,
@@ -35,6 +42,13 @@ or has different parameters. If you don't care about the parameters,
 you can omit them.
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireCommitSucceeds2 -->
+
+```php
+$browser->type('@name-input', 'John Doe')
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireCommitSucceeds('splitNameParts')
+    ->assertSeeIn('@first-name', 'John');
+```
 
 <!-- #EXAMPLE_COPY_END -->
 
@@ -44,6 +58,13 @@ The inverse of `waitUntilLivewireCommitSucceeds`.
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireCommitFails -->
 
+```php
+$browser->type('@name-input', 'John Doe')
+    ->click('@button-to-404-debounced')
+    ->waitUntilLivewireCommitFails('throws404')
+    ->assertSeeIn('@first-name', 'empty');
+```
+
 <!-- #EXAMPLE_COPY_END -->
 
 ### `clickAndWaitUntilLivewireCommitSucceeds`
@@ -52,6 +73,14 @@ This sets up `waitUntilLivewireCommitSucceeds` to listen for a Livewire request
 cycle and clicks the element.
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleClickAndWaitUntilLivewireCommitSucceeds -->
+
+```php
+$parameters = ['John Doe']; // Optional, leave this out if you don't have parameters or wish to match any parameters
+
+$browser->type('@name-input', 'John Doe')
+    ->clickAndWaitUntilLivewireCommitSucceeds('@split-button-debounced', 'splitNameParts', $parameters)
+    ->assertSeeIn('@first-name', 'John');
+```
 
 <!-- #EXAMPLE_COPY_END -->
 
@@ -66,25 +95,48 @@ request cycle for the specified property keys.
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireUpdateSucceeds1 -->
 
+```php
+$browser->type('@age-input', '42')
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireUpdateSucceeds(['age'])
+    ->assertSeeIn('@age', '42');
+```
+
 <!-- #EXAMPLE_COPY_END -->
 
 Or for multiple properties:
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireUpdateSucceeds2 -->
 
+```php
+$browser->type('@age-input', '42')
+    ->type('@job-input', 'Plumber')
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireUpdateSucceeds(['age', 'job'])
+    ->assertSeeIn('@age', '42')
+    ->assertSeeIn('@job', 'Plumber');
+```
+
 <!-- #EXAMPLE_COPY_END -->
 
-With this last example the browser will wait until an update cycle is finished
+*With this last example the browser will wait until an update cycle is finished
 in which both the `age` and `job` livewire properties are updated.
 If those properties are deferred (by default) then Livewire will wait
 a request is made.
-In the example above they are deferred until clicking `@split-button-debounced`.
+In the example above they are deferred until clicking `@split-button-debounced`.*
 
 ### `waitUntilLivewireUpdateFails`
 
 The inverse of `waitUntilLivewireUpdateSucceeds`.
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireUpdateFails -->
+
+```php
+$browser->type('@age-input', '42')
+    ->click('@button-to-404-debounced')
+    ->waitUntilLivewireUpdateFails(['age'])
+    ->assertSeeIn('@age', '-1');
+```
 
 <!-- #EXAMPLE_COPY_END -->
 
@@ -95,6 +147,12 @@ cycle and clicks the element.
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleClickAndWaitUntilLivewireUpdateSucceeds -->
 
+```php
+$browser->type('@age-input', '42')
+    ->clickAndWaitUntilLivewireUpdateSucceeds('@split-button-debounced', ['age'])
+    ->assertSeeIn('@age', '42');
+```
+
 <!-- #EXAMPLE_COPY_END -->
 
 ### The `action` parameter
@@ -103,6 +161,14 @@ Sometimes a sequence of actions may trigger too fast for you to listen for a
 Livewire commit or update:
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleActionFailing -->
+
+```php
+$browser->type('@name-input', 'John Doe')
+    ->click('@split-button')
+    // *🚀 hyperfast split-button somehow already completed a full commit here*
+    ->waitUntilLivewireCommitSucceeds('splitNameParts', ['John Doe']) // test fails here due to timeout
+    ->assertSeeIn('@first-name', 'John');
+```
 
 <!-- #EXAMPLE_COPY_END -->
 
@@ -133,6 +199,18 @@ Here is an example how you can use this `action` parameter with
 
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleAction -->
 
+```php
+$browser->type('@name-input', 'John Doe')
+    ->waitUntilLivewireCommitSucceeds(
+        'splitNameParts',
+        ['John Doe'],
+        action: function () use ($browser) {
+            $browser->click('@split-button');
+        }
+    )
+    ->assertSeeIn('@first-name', 'John');
+```
+
 <!-- #EXAMPLE_COPY_END -->
 
 *Internally the `clickAndWaitUntilLivewireCommitSucceeds` and
@@ -161,7 +239,22 @@ composer require luttje/livewire-gloom
 
 Create a new Dusk test case and use the macros described above:
 
-<!-- #EXAMPLE_COPY_START = \Luttje\ExampleTester\Tests\ExampleTest::testExample -->
+<!-- #EXAMPLE_COPY_START = { "symbol": "\\Luttje\\LivewireGloom\\Tests\\Browser\\ExampleTest", "short": false } -->
+
+```php
+class ExampleTest extends BrowserTestCase
+{
+    public function testExample(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/example')
+                ->type('@name-input', 'John Doe')
+                ->clickAndWaitUntilLivewireCommitSucceeds('@split-button', 'splitNameParts', ['John Doe'])
+                ->assertSeeIn('@first-name', 'John');
+        });
+    }
+}
+```
 
 <!-- #EXAMPLE_COPY_END -->
 
@@ -182,3 +275,4 @@ composer test
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+

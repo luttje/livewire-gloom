@@ -57,10 +57,10 @@ final class ReadmeExamplesTest extends BrowserTestCase
 
     public static function exampleClickAndWaitUntilLivewireCommitSucceeds(Browser $browser)
     {
-        $optionalParameters = ['John Doe']; // Optional, leave this away if you don't have parameters or wish to match any parameters
+        $parameters = ['John Doe']; // Optional, leave this out if you don't have parameters or wish to match any parameters
 
         $browser->type('@name-input', 'John Doe')
-            ->clickAndWaitUntilLivewireCommitSucceeds('@split-button-debounced', 'splitNameParts', $optionalParameters)
+            ->clickAndWaitUntilLivewireCommitSucceeds('@split-button-debounced', 'splitNameParts', $parameters)
             ->assertSeeIn('@first-name', 'John');
     }
 
