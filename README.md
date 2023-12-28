@@ -221,11 +221,12 @@ either of those functions.*
 <!-- #EXAMPLES_END -->
 
 > [!Note]
-> The above examples are compiled from metadata in the tests. If you want to see 
+> All of the above examples are taken from the tests. If you want to see
 > more code surrounding the examples,
-> [check out the tests](tests/Browser/ReadmeExamplesTest.php).
+> [check out those tests](tests/Browser/ReadmeExamplesTest.php).
 >
-> To generate the examples, run `composer compile-readme`.
+> To generate the examples, run `composer compile-readme`. This is done
+> through [luttje/php-example-tester](https://github.com/luttje/php-example-tester).
 
 ## Installation
 
