@@ -125,6 +125,22 @@ If those properties are deferred (by default) then Livewire will wait
 a request is made.
 In the example above they are deferred until clicking `@split-button-debounced`.*
 
+#### Regex matching
+
+You can use Regex matching in `waitUntilLivewireUpdateSucceeds`, just start the
+property key with a `/` and end it with `/`:
+
+<!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleWaitUntilLivewireUpdateSucceedsRegex -->
+
+```php
+$browser->type('@hobby-name-2', 'Gaming Professionally')
+    ->click('@split-button-debounced')
+    ->waitUntilLivewireUpdateSucceeds(['/hobbies\.[^\.]+\.name/'])
+    ->assertValue('@hobby-name-2', 'Gaming Professionally');
+```
+
+<!-- #EXAMPLE_COPY_END -->
+
 ### `waitUntilLivewireUpdateFails`
 
 The inverse of `waitUntilLivewireUpdateSucceeds`.
@@ -163,6 +179,7 @@ Livewire commit or update:
 <!-- #EXAMPLE_COPY_START = \Luttje\LivewireGloom\Tests\Browser\ReadmeExamplesTest::exampleActionFailing -->
 
 ```php
+// ! This test fails sometimes when the button is kinda slow. In that case the waitUntilLivewireCommitSucceeds is in time (but that's not reliable).
 $browser->type('@name-input', 'John Doe')
     ->click('@split-button')
     // *🚀 hyperfast split-button somehow already completed a full commit here*
@@ -276,4 +293,6 @@ composer test
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+e (MIT). Please see [License File](LICENSE.md) for more information.
 

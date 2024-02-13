@@ -14,6 +14,21 @@ class NameComponent extends Component
 
     public $job = 'empty';
 
+    public $hobbies = [
+        'f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3a' => [
+            'name' => 'Reading',
+            'icon' => '📚',
+        ],
+        'f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3b' => [
+            'name' => 'Gaming',
+            'icon' => '🎮',
+        ],
+        'f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3c' => [
+            'name' => 'Cooking',
+            'icon' => '🍳',
+        ],
+    ];
+
     public function splitNameParts($name)
     {
         $parts = explode(' ', $name);
@@ -43,6 +58,13 @@ class NameComponent extends Component
                 <div dusk="last-name">{{ $lastName }}</div>
                 <div dusk="age">{{ $age }}</div>
                 <div dusk="job">{{ $job }}</div>
+                <div dusk="hobbies">
+                    @foreach($hobbies as $key => $hobby)
+                    <div wire:key="hobby-{{ $loop->index }}">
+                        <input dusk="hobby-name-{{ $loop->index + 1 }}" wire:model="hobbies.{{ $key }}.name">
+                    </div>
+                    @endforeach
+                </div>
             </div>
         HTML;
     }

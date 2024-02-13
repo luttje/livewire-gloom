@@ -91,6 +91,14 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@job', 'Plumber');
     }
 
+    public static function exampleWaitUntilLivewireUpdateSucceedsRegex(Browser $browser)
+    {
+        $browser->type('@hobby-name-2', 'Gaming Professionally')
+            ->click('@split-button-debounced')
+            ->waitUntilLivewireUpdateSucceeds(['/hobbies\.[^\.]+\.name/'])
+            ->assertValue('@hobby-name-2', 'Gaming Professionally');
+    }
+
     public function testCanWaitUntilALivewireUpdateSucceeds1(): void
     {
         $this->browse(function (Browser $browser) {
@@ -106,6 +114,15 @@ final class ReadmeExamplesTest extends BrowserTestCase
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
 
             static::exampleWaitUntilLivewireUpdateSucceeds2($browser);
+        });
+    }
+
+    public function testCanWaitUntilALivewireUpdateSucceedsRegex(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleWaitUntilLivewireUpdateSucceedsRegex($browser);
         });
     }
 
@@ -144,6 +161,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
 
     public static function exampleActionFailing(Browser $browser)
     {
+        // ! This test fails sometimes when the button is kinda slow. In that case the waitUntilLivewireCommitSucceeds is in time (but that's not reliable).
         $browser->type('@name-input', 'John Doe')
             ->click('@split-button')
             // *🚀 hyperfast split-button somehow already completed a full commit here*

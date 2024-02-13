@@ -162,8 +162,16 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
 
                     // Check in the commit if it updates the keys we're waiting for.
                     for (const key in commitUpdates) {
-                        if (updatedKeys.includes(key)) {
-                            matchedCount++;
+                        for (let i = 0; i < updatedKeys.length; i++) {
+                            const updatedKey = updatedKeys[i];
+
+                            if (updatedKey.startsWith('/') && updatedKey.endsWith('/')) {
+                                if (new RegExp(updatedKey.slice(1, -1)).test(key)) {
+                                    matchedCount++;
+                                }
+                            } else if (updatedKey === key) {
+                                matchedCount++;
+                            }
                         }
                     }
 
