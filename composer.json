@@ -21,7 +21,7 @@
         "colinodell/indentation": "^1.0",
         "illuminate/contracts": "^10.0",
         "larastan/larastan": "^2.0.1",
-        "laravel/dusk": "^7.0.0",
+        "laravel/dusk": "^8.0.0",
         "laravel/pint": "^1.0",
         "livewire/livewire": "^3.0.3",
         "luttje/php-example-tester": "^0.3.0",
