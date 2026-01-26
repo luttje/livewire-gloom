@@ -53,14 +53,8 @@ jobs:
 
       - name: Setup dusk/chrome
         run: |
+          composer require --dev orchestra/dusk-updater
           vendor/bin/dusk-updater update --no-interaction
-          find . -name "*chromedriver*" -type f 2>/dev/null || true
-          # Handle odd chromedriver directory structure on some builds of the matrix
-          if [ -f vendor/laravel/dusk/bin/chromedriver-linux64/chromedriver ]; then
-            cp vendor/laravel/dusk/bin/chromedriver-linux64/chromedriver vendor/laravel/dusk/bin/chromedriver-linux
-          fi
-          chmod +x vendor/laravel/dusk/bin/chromedriver-linux
-          echo "Chromedriver setup complete:"
       
       - name: Execute tests (with retry)
         uses: nick-fields/retry@v3.0.2
