@@ -52,8 +52,13 @@ jobs:
         run: composer show -D
 
       - name: Setup dusk/chrome
-        run: php artisan dusk:chrome-driver --detect
-
+        run: |
+          vendor/bin/dusk-updater update --no-interaction
+          # Copy chromedriver to where Dusk expects it
+          mkdir -p vendor/laravel/dusk/bin
+          cp bin/chromedriver-linux vendor/laravel/dusk/bin/chromedriver-linux
+          chmod +x vendor/laravel/dusk/bin/chromedriver-linux
+      
       - name: Execute tests (with retry)
         uses: nick-fields/retry@v3.0.2
         env:
