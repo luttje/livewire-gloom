@@ -54,9 +54,7 @@ jobs:
       - name: Setup dusk/chrome
         run: |
           vendor/bin/dusk-updater update --no-interaction
-          echo "Searching for chromedriver..."
-          find . -name "*chromedriver*" -type f 2>/dev/null || true
-          ls -la vendor/bin/ || true
+          chmod +x vendor/laravel/dusk/bin/chromedriver-linux
       
       - name: Execute tests (with retry)
         uses: nick-fields/retry@v3.0.2
