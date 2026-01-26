@@ -54,10 +54,9 @@ jobs:
       - name: Setup dusk/chrome
         run: |
           vendor/bin/dusk-updater update --no-interaction
-          # Copy chromedriver to where Dusk expects it
-          mkdir -p vendor/laravel/dusk/bin
-          cp bin/chromedriver-linux vendor/laravel/dusk/bin/chromedriver-linux
-          chmod +x vendor/laravel/dusk/bin/chromedriver-linux
+          echo "Searching for chromedriver..."
+          find . -name "*chromedriver*" -type f 2>/dev/null || true
+          ls -la vendor/bin/ || true
       
       - name: Execute tests (with retry)
         uses: nick-fields/retry@v3.0.2
