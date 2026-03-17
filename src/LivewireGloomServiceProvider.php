@@ -29,21 +29,20 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          */
         $waitUntilLivewireCommit = function (Browser $browser, string $method, ?array $params = null, string $succeedOrFail = 'succeed', ?Closure $action = null) {
             $parametersAsJson = $params != null ? json_encode($params) : 'null';
-            $methodAndParamsHash = md5($succeedOrFail.$method.$parametersAsJson);
+            $methodAndParamsHash = md5($succeedOrFail . $method . $parametersAsJson);
 
             // Inject a script that will listen for the commit hook and see if the method and parameters match the ones we're waiting for.
             // Will dispatch an event with the result.
             $browser->script(<<<JS
-                Livewire.hook('commit', function ({ component, commit, respond, succeed, fail }) {
+                Livewire.interceptMessage(function ({ message, onSend, onSuccess, onError, onFailure }) {
                     const method = '$method';
                     const params = $parametersAsJson;
-                    const succeedOrFail = '$succeedOrFail';
+                    let isMatched = params === null;
 
-                    // If the parameters are null, we don't care about the parameters.
-                    if (params !== null) {
-                        const commitCalls = commit.calls;
+                    onSend(({ payload }) => {
+                        if (isMatched) return;
+                        const commitCalls = payload.calls;
                         const commitCallsLength = commitCalls.length;
-                        let matched = false;
 
                         // Check in the commit if this is the method and parameter combination we're waiting for.
                         for (let i = 0; i < commitCallsLength; i++) {
@@ -65,29 +64,38 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
                                 }
 
                                 if (paramsMatch) {
-                                    matched = true;
+                                    isMatched = true;
                                     break;
                                 }
                             }
                         }
+                    });
 
-                        if (!matched) {
-                            return;
-                        }
-                    }
-
-                    succeed(({ snapshot, effect }) => {
+                    onSuccess(({ payload }) => {
+                        if (!isMatched) return;
                         window.dispatchEvent(new CustomEvent('support-livewire-dusk-testing-commit-succeed-$methodAndParamsHash', {
                             detail: {
                                 method,
                                 params,
-                                snapshot,
-                                effect,
+                                snapshot: payload.snapshot,
+                                effect: payload.effects,
                             },
                         }));
                     });
 
-                    fail(() => {
+                    onError(() => {
+                        if (!isMatched) return;
+                        console.error('fail called', method, params, 'support-livewire-dusk-testing-commit-succeed-$methodAndParamsHash');
+                        window.dispatchEvent(new CustomEvent('support-livewire-dusk-testing-commit-fail-$methodAndParamsHash', {
+                            detail: {
+                                method,
+                                params,
+                            },
+                        }));
+                    });
+
+                    onFailure(() => {
+                        if (!isMatched) return;
                         console.error('fail called', method, params, 'support-livewire-dusk-testing-commit-succeed-$methodAndParamsHash');
                         window.dispatchEvent(new CustomEvent('support-livewire-dusk-testing-commit-fail-$methodAndParamsHash', {
                             detail: {
@@ -111,7 +119,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
             }
 
             // Wait for the event to be dispatched
-            $browser->waitForEvent('support-livewire-dusk-testing-commit-'.$succeedOrFail.'-'.$methodAndParamsHash, 'window');
+            $browser->waitForEvent('support-livewire-dusk-testing-commit-' . $succeedOrFail . '-' . $methodAndParamsHash, 'window');
 
             return $browser;
         };
@@ -149,49 +157,59 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          */
         $waitUntilLivewireUpdate = function (Browser $browser, array $updatedKeys = [], string $succeedOrFail = 'succeed', ?Closure $action = null) {
             $updatedKeysAsJson = json_encode($updatedKeys);
-            $updatedKeysHash = md5($succeedOrFail.$updatedKeysAsJson);
+            $updatedKeysHash = md5($succeedOrFail . $updatedKeysAsJson);
 
             // Inject a script that will listen for the update hook and see if the updated keys match the ones we're waiting for.
             // Will dispatch an event with the result.
             $browser->script(<<<JS
-                Livewire.hook('commit', function ({ component, commit, respond, succeed, fail }) {
+                Livewire.interceptMessage(function ({ message, onSend, onSuccess, onError, onFailure }) {
                     const updatedKeys = $updatedKeysAsJson;
-                    const succeedOrFail = '$succeedOrFail';
-                    const commitUpdates = commit.updates;
-                    let matchedCount = 0;
+                    let isMatched = false;
 
-                    // Check in the commit if it updates the keys we're waiting for.
-                    for (const key in commitUpdates) {
-                        for (let i = 0; i < updatedKeys.length; i++) {
-                            const updatedKey = updatedKeys[i];
+                    onSend(({ payload }) => {
+                        const commitUpdates = payload.updates;
+                        let matchedCount = 0;
 
-                            if (updatedKey.startsWith('/') && updatedKey.endsWith('/')) {
-                                if (new RegExp(updatedKey.slice(1, -1)).test(key)) {
+                        // Check in the commit if it updates the keys we're waiting for.
+                        for (const key in commitUpdates) {
+                            for (let i = 0; i < updatedKeys.length; i++) {
+                                const updatedKey = updatedKeys[i];
+
+                                if (updatedKey.startsWith('/') && updatedKey.endsWith('/')) {
+                                    if (new RegExp(updatedKey.slice(1, -1)).test(key)) {
+                                        matchedCount++;
+                                    }
+                                } else if (updatedKey === key) {
                                     matchedCount++;
                                 }
-                            } else if (updatedKey === key) {
-                                matchedCount++;
                             }
                         }
-                    }
 
-                    const matched = matchedCount === updatedKeys.length;
+                        isMatched = matchedCount === updatedKeys.length;
+                    });
 
-                    if (!matched) {
-                        return;
-                    }
-
-                    succeed(({ snapshot, effect }) => {
+                    onSuccess(({ payload }) => {
+                        if (!isMatched) return;
                         window.dispatchEvent(new CustomEvent('support-livewire-dusk-testing-update-succeed-$updatedKeysHash', {
                             detail: {
                                 updatedKeys,
-                                snapshot,
-                                effect,
+                                snapshot: payload.snapshot,
+                                effect: payload.effects,
                             },
                         }));
                     });
 
-                    fail(() => {
+                    onError(() => {
+                        if (!isMatched) return;
+                        window.dispatchEvent(new CustomEvent('support-livewire-dusk-testing-update-fail-$updatedKeysHash', {
+                            detail: {
+                                updatedKeys,
+                            },
+                        }));
+                    });
+
+                    onFailure(() => {
+                        if (!isMatched) return;
                         window.dispatchEvent(new CustomEvent('support-livewire-dusk-testing-update-fail-$updatedKeysHash', {
                             detail: {
                                 updatedKeys,
@@ -213,7 +231,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
             }
 
             // Wait for the event to be dispatched
-            $browser->waitForEvent('support-livewire-dusk-testing-update-'.$succeedOrFail.'-'.$updatedKeysHash, 'window');
+            $browser->waitForEvent('support-livewire-dusk-testing-update-' . $succeedOrFail . '-' . $updatedKeysHash, 'window');
 
             return $browser;
         };

@@ -14,16 +14,24 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: [8.3, 8.2, 8.1]
-        laravel: [10.*]
-        stability: [prefer-stable]
+        php: [8.4, 8.3, 8.2, 8.1]
+        laravel: [10.*, 11.*]
+        stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 10.*
             testbench: 8.*
             carbon: ^2.63
+            phpunit: 10.*
+          - laravel: 11.*
+            testbench: ^9.1.4|^10.0
+            carbon: ^2.63
+            phpunit: 11.*
+        exclude:
+          - laravel: 11.*
+            php: 8.1
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
