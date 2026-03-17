@@ -29,7 +29,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          */
         $waitUntilLivewireCommit = function (Browser $browser, string $method, ?array $params = null, string $succeedOrFail = 'succeed', ?Closure $action = null) {
             $parametersAsJson = $params != null ? json_encode($params) : 'null';
-            $methodAndParamsHash = md5($succeedOrFail . $method . $parametersAsJson);
+            $methodAndParamsHash = md5($succeedOrFail.$method.$parametersAsJson);
 
             // Inject a script that will listen for the commit hook and see if the method and parameters match the ones we're waiting for.
             // Will dispatch an event with the result.
@@ -119,7 +119,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
             }
 
             // Wait for the event to be dispatched
-            $browser->waitForEvent('support-livewire-dusk-testing-commit-' . $succeedOrFail . '-' . $methodAndParamsHash, 'window');
+            $browser->waitForEvent('support-livewire-dusk-testing-commit-'.$succeedOrFail.'-'.$methodAndParamsHash, 'window');
 
             return $browser;
         };
@@ -157,7 +157,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
          */
         $waitUntilLivewireUpdate = function (Browser $browser, array $updatedKeys = [], string $succeedOrFail = 'succeed', ?Closure $action = null) {
             $updatedKeysAsJson = json_encode($updatedKeys);
-            $updatedKeysHash = md5($succeedOrFail . $updatedKeysAsJson);
+            $updatedKeysHash = md5($succeedOrFail.$updatedKeysAsJson);
 
             // Inject a script that will listen for the update hook and see if the updated keys match the ones we're waiting for.
             // Will dispatch an event with the result.
@@ -231,7 +231,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
             }
 
             // Wait for the event to be dispatched
-            $browser->waitForEvent('support-livewire-dusk-testing-update-' . $succeedOrFail . '-' . $updatedKeysHash, 'window');
+            $browser->waitForEvent('support-livewire-dusk-testing-update-'.$succeedOrFail.'-'.$updatedKeysHash, 'window');
 
             return $browser;
         };

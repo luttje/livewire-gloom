@@ -49,13 +49,13 @@ class BrowserTestCase extends TestCase
             $class = urldecode($component);
 
             return Blade::render(
-                "<html><head><meta name=\"csrf-token\" content=\"{{ csrf_token() }}\" />\n@livewireStyles</head><body>\n" .
-                    "@livewire(\\$class::class)\n" .
+                "<html><head><meta name=\"csrf-token\" content=\"{{ csrf_token() }}\" />\n@livewireStyles</head><body>\n".
+                    "@livewire(\\$class::class)\n".
                     '@livewireScripts</body></html>'
             );
         })->name('livewire-gloom.component');
 
-        $router->redirect('/example', '/livewire-gloom-component/' . urlencode(NameComponent::class));
+        $router->redirect('/example', '/livewire-gloom-component/'.urlencode(NameComponent::class));
     }
 
     protected function setUp(): void
@@ -93,7 +93,7 @@ class BrowserTestCase extends TestCase
     public function configureTestsDirectory()
     {
         if ($this->testsDirectory == '') {
-            $this->testsDirectory = $this->getPackagePath() . '/tests';
+            $this->testsDirectory = $this->getPackagePath().'/tests';
         }
     }
 
@@ -134,7 +134,7 @@ class BrowserTestCase extends TestCase
 
     protected function generateClassNameFromFile($file)
     {
-        return $this->getTestsNamespace() . '\\' . Str::of($file->getRelativePathname())->before('.php')->replace('/', '\\');
+        return $this->getTestsNamespace().'\\'.Str::of($file->getRelativePathname())->before('.php')->replace('/', '\\');
     }
 
     protected function generateTestComponentsClassList()
