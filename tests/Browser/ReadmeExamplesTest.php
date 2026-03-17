@@ -28,7 +28,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@first-name', 'John');
     }
 
-    public function testCanWaitUntilALivewireCommitSucceedsWithAction(): void
+    public function test_can_wait_until_a_livewire_commit_succeeds_with_action(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
@@ -46,7 +46,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@first-name', 'empty');
     }
 
-    public function testCanWaitUntilALivewireCommitFails(): void
+    public function test_can_wait_until_a_livewire_commit_fails(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
@@ -64,7 +64,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@first-name', 'John');
     }
 
-    public function testCanClickAndWaitUntilALivewireCommitSucceeds(): void
+    public function test_can_click_and_wait_until_a_livewire_commit_succeeds(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
@@ -99,7 +99,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertValue('@hobby-name-2', 'Gaming Professionally');
     }
 
-    public function testCanWaitUntilALivewireUpdateSucceeds1(): void
+    public function test_can_wait_until_a_livewire_update_succeeds1(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
@@ -108,7 +108,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    public function testCanWaitUntilALivewireUpdateSucceeds2(): void
+    public function test_can_wait_until_a_livewire_update_succeeds2(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
@@ -117,7 +117,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
         });
     }
 
-    public function testCanWaitUntilALivewireUpdateSucceedsRegex(): void
+    public function test_can_wait_until_a_livewire_update_succeeds_regex(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
@@ -134,7 +134,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@age', '-1');
     }
 
-    public function testCanWaitUntilALivewireUpdateFails(): void
+    public function test_can_wait_until_a_livewire_update_fails(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
@@ -150,7 +150,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@age', '42');
     }
 
-    public function testCanClickAndWaitUntilALivewireUpdateSucceeds(): void
+    public function test_can_click_and_wait_until_a_livewire_update_succeeds(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
@@ -203,7 +203,7 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@first-name', 'John');
     }
 
-    public function testCanUseActionParameter(): void
+    public function test_can_use_action_parameter(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false));

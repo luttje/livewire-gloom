@@ -8,7 +8,7 @@ use Luttje\LivewireGloom\Tests\Browser\Fixtures\NameComponent;
 
 final class LivewireGloomTest extends BrowserTestCase
 {
-    public function testCanWaitUntilALivewireCommitSucceeds(): void
+    public function test_can_wait_until_a_livewire_commit_succeeds(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', IncrementComponent::class, false))
@@ -18,7 +18,7 @@ final class LivewireGloomTest extends BrowserTestCase
         });
     }
 
-    public function testCanWaitUntilALivewireCommitSucceedsWithoutParameters(): void
+    public function test_can_wait_until_a_livewire_commit_succeeds_without_parameters(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', IncrementComponent::class, false))
@@ -28,7 +28,7 @@ final class LivewireGloomTest extends BrowserTestCase
         });
     }
 
-    public function testCanWaitUntilALivewireUpdateSucceeds(): void
+    public function test_can_wait_until_a_livewire_update_succeeds(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false))
@@ -38,7 +38,7 @@ final class LivewireGloomTest extends BrowserTestCase
         });
     }
 
-    public function testCanWaitUntilALivewireCommitSucceedsWithParameters(): void
+    public function test_can_wait_until_a_livewire_commit_succeeds_with_parameters(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false))
@@ -49,7 +49,7 @@ final class LivewireGloomTest extends BrowserTestCase
         });
     }
 
-    public function testCanWaitUntilALivewireCommitSucceedsWithMultipleParameters(): void
+    public function test_can_wait_until_a_livewire_commit_succeeds_with_multiple_parameters(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false))
@@ -60,7 +60,7 @@ final class LivewireGloomTest extends BrowserTestCase
         });
     }
 
-    public function testCanWaitUntilALivewireCommitSucceedsWithMultipleCalls(): void
+    public function test_can_wait_until_a_livewire_commit_succeeds_with_multiple_calls(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false))
@@ -75,7 +75,7 @@ final class LivewireGloomTest extends BrowserTestCase
         });
     }
 
-    public function testCanWaitUntilALivewireCommitSucceedsWithMultipleCallsAndMultipleParameters(): void
+    public function test_can_wait_until_a_livewire_commit_succeeds_with_multiple_calls_and_multiple_parameters(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('livewire-gloom.component', NameComponent::class, false))

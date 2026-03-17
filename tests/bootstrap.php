@@ -1,3 +1,5 @@
 <?php
 
-\Orchestra\Testbench\Dusk\Options::withoutUI();
+use Orchestra\Testbench\Dusk\Options;
+
+Options::withoutUI();

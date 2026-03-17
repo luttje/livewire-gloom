@@ -6,7 +6,7 @@ use Laravel\Dusk\Browser;
 
 class ExampleTest extends BrowserTestCase
 {
-    public function testExample(): void
+    public function test_example(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/example')

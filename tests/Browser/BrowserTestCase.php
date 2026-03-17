@@ -2,6 +2,7 @@
 
 namespace Luttje\LivewireGloom\Tests\Browser;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -39,7 +40,7 @@ class BrowserTestCase extends TestCase
     /**
      * Define web routes setup.
      *
-     * @param  \Illuminate\Routing\Router  $router
+     * @param  Router  $router
      * @return void
      */
     protected function defineWebRoutes($router)
