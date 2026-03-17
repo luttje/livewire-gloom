@@ -3,11 +3,11 @@ name: run-tests
 on:
   push:
     paths:
-      - '**.php'
-      - '.github/workflows/run-tests.yml'
-      - 'phpunit.xml.dist'
-      - 'composer.json'
-      - 'composer.lock'
+      - "**.php"
+      - ".github/workflows/run-tests.yml"
+      - "phpunit.xml.dist"
+      - "composer.json"
+      - "composer.lock"
 
 jobs:
   test:
@@ -53,8 +53,8 @@ jobs:
 
       - name: Setup dusk/chrome
         run: |
-          vendor/bin/dusk-updater update --no-interaction
-      
+          vendor/bin/dusk-updater detect --auto-update
+
       - name: Execute tests (with retry)
         uses: nick-fields/retry@v3.0.2
         env:
@@ -74,7 +74,7 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v2
-      with:
-        parallel-finished: true
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
