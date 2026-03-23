@@ -65,7 +65,7 @@ jobs:
           vendor/bin/dusk-updater detect --auto-update
 
       - name: Execute tests (with retry)
-        uses: nick-fields/retry@v3.0.2
+        uses: nick-fields/retry@v4.0.0
         env:
           RUNNING_IN_CI: true
         with:
