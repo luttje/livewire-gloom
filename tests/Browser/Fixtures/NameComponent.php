@@ -43,6 +43,11 @@ class NameComponent extends Component
         abort(404);
     }
 
+    public function throwsWithParam($param)
+    {
+        abort(404);
+    }
+
     public function render()
     {
         return <<<'HTML'
@@ -54,6 +59,8 @@ class NameComponent extends Component
                 <button dusk="split-button-debounced" wire:click.debounce.500ms="splitNameParts(name)">Split (Slow)</button>
                 <button dusk="button-to-404" wire:click="throws404">404</button>
                 <button dusk="button-to-404-debounced" wire:click.debounce.500ms="throws404">404</button>
+                <button dusk="button-404-with-param" wire:click="throwsWithParam(name)">404 with param</button>
+                <button dusk="button-404-with-param-debounced" wire:click.debounce.500ms="throwsWithParam(name)">404 with param (slow)</button>
                 <div dusk="first-name">{{ $firstName }}</div>
                 <div dusk="last-name">{{ $lastName }}</div>
                 <div dusk="age">{{ $age }}</div>

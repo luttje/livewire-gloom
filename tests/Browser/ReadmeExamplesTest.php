@@ -169,27 +169,6 @@ final class ReadmeExamplesTest extends BrowserTestCase
             ->assertSeeIn('@first-name', 'John');
     }
 
-    // This test fails and I forgot what I was trying to test here. Commented it for now.
-    // TODO: Figure out what I wanted to test here and either fix the test or remove it.
-    // public function testCanFailWithoutActionParameter(): void
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
-
-    //         $success = false;
-
-    //         try {
-    //             static::exampleActionFailing($browser);
-    //         } catch (\Facebook\WebDriver\Exception\TimeoutException $e) {
-    //             // We expect this to happen because the button is too fast.
-    //             // Users should use the `action` parameter to work around this.
-    //             $success = true;
-    //         }
-
-    //         $this->assertTrue($success, 'The test is expected to timeout.');
-    //     });
-    // }
-
     public static function exampleAction(Browser $browser)
     {
         $browser->type('@name-input', 'John Doe')
@@ -211,4 +190,154 @@ final class ReadmeExamplesTest extends BrowserTestCase
             static::exampleAction($browser);
         });
     }
+
+    public static function exampleActionForCommitFail(Browser $browser)
+    {
+        $browser->type('@name-input', 'John Doe')
+            ->waitUntilLivewireCommitFails(
+                'throwsWithParam',
+                ['John Doe'],
+                action: function () use ($browser) {
+                    $browser->click('@button-404-with-param');
+                }
+            )
+            ->assertSeeIn('@first-name', 'empty');
+    }
+
+    public function test_can_use_action_parameter_for_commit_fail(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleActionForCommitFail($browser);
+        });
+    }
+
+    public static function exampleActionForUpdateSucceeds(Browser $browser)
+    {
+        $browser->type('@age-input', '42')
+            ->waitUntilLivewireUpdateSucceeds(
+                ['age'],
+                action: function () use ($browser) {
+                    $browser->click('@split-button');
+                }
+            )
+            ->assertSeeIn('@age', '42');
+    }
+
+    public function test_can_use_action_parameter_for_update_succeeds(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleActionForUpdateSucceeds($browser);
+        });
+    }
+
+    public static function exampleActionForUpdateFails(Browser $browser)
+    {
+        $browser->type('@age-input', '42')
+            ->waitUntilLivewireUpdateFails(
+                ['age'],
+                action: function () use ($browser) {
+                    $browser->click('@button-to-404');
+                }
+            )
+            ->assertSeeIn('@age', '-1');
+    }
+
+    public function test_can_use_action_parameter_for_update_fails(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleActionForUpdateFails($browser);
+        });
+    }
+
+    public static function exampleWaitUntilLivewireCommitFailsWithParams(Browser $browser)
+    {
+        $browser->type('@name-input', 'John Doe')
+            ->click('@button-404-with-param-debounced')
+            ->waitUntilLivewireCommitFails('throwsWithParam', ['John Doe'])
+            ->assertSeeIn('@first-name', 'empty');
+    }
+
+    public function test_can_wait_until_a_livewire_commit_fails_with_params(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleWaitUntilLivewireCommitFailsWithParams($browser);
+        });
+    }
+
+    public static function exampleWaitUntilLivewireUpdateFailsMultipleKeys(Browser $browser)
+    {
+        $browser->type('@age-input', '42')
+            ->type('@job-input', 'Plumber')
+            ->click('@button-to-404-debounced')
+            ->waitUntilLivewireUpdateFails(['age', 'job'])
+            ->assertSeeIn('@age', '-1')
+            ->assertSeeIn('@job', 'empty');
+    }
+
+    public function test_can_wait_until_a_livewire_update_fails_multiple_keys(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleWaitUntilLivewireUpdateFailsMultipleKeys($browser);
+        });
+    }
+
+    public static function exampleWaitUntilLivewireUpdateFailsRegex(Browser $browser)
+    {
+        $browser->type('@hobby-name-2', 'Gaming Professionally')
+            ->click('@button-to-404-debounced')
+            ->waitUntilLivewireUpdateFails(['/hobbies\.[^\.]+\.name/'])
+            ->assertSeeIn('@age', '-1'); // unchanged default confirms the request failed
+    }
+
+    public function test_can_wait_until_a_livewire_update_fails_regex(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleWaitUntilLivewireUpdateFailsRegex($browser);
+        });
+    }
+
+    public static function exampleClickAndWaitUntilLivewireCommitFails(Browser $browser)
+    {
+        $browser->type('@name-input', 'John Doe')
+            ->clickAndWaitUntilLivewireCommitFails('@button-404-with-param-debounced', 'throwsWithParam', ['John Doe'])
+            ->assertSeeIn('@first-name', 'empty');
+    }
+
+    public function test_can_click_and_wait_until_a_livewire_commit_fails(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleClickAndWaitUntilLivewireCommitFails($browser);
+        });
+    }
+
+    public static function exampleClickAndWaitUntilLivewireUpdateFails(Browser $browser)
+    {
+        $browser->type('@age-input', '42')
+            ->clickAndWaitUntilLivewireUpdateFails('@button-to-404-debounced', ['age'])
+            ->assertSeeIn('@age', '-1');
+    }
+
+    public function test_can_click_and_wait_until_a_livewire_update_fails(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('livewire-gloom.component', NameComponent::class, false));
+
+            static::exampleClickAndWaitUntilLivewireUpdateFails($browser);
+        });
+    }
 }
+

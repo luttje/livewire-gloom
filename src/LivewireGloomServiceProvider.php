@@ -57,7 +57,7 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
                                     const param = callParams[j];
                                     const expectedParam = params[j];
 
-                                    if (param !== expectedParam) {
+                                    if (JSON.stringify(param) !== JSON.stringify(expectedParam)) {
                                         paramsMatch = false;
                                         break;
                                     }
@@ -141,6 +141,16 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
         Browser::macro('clickAndWaitUntilLivewireCommitSucceeds', function (string $selector, string $method, ?array $params = null) use ($waitUntilLivewireCommit) {
             /** @var Browser $this */
             $waitUntilLivewireCommit($this, $method, $params, 'succeed', function () use ($selector) {
+                /** @var Browser $this */
+                $this->click($selector);
+            });
+
+            return $this;
+        });
+
+        Browser::macro('clickAndWaitUntilLivewireCommitFails', function (string $selector, string $method, ?array $params = null) use ($waitUntilLivewireCommit) {
+            /** @var Browser $this */
+            $waitUntilLivewireCommit($this, $method, $params, 'fail', function () use ($selector) {
                 /** @var Browser $this */
                 $this->click($selector);
             });
@@ -253,6 +263,16 @@ class LivewireGloomServiceProvider extends PackageServiceProvider
         Browser::macro('clickAndWaitUntilLivewireUpdateSucceeds', function (string $selector, array $updatedKeys = []) use ($waitUntilLivewireUpdate) {
             /** @var Browser $this */
             $waitUntilLivewireUpdate($this, $updatedKeys, 'succeed', function () use ($selector) {
+                /** @var Browser $this */
+                $this->click($selector);
+            });
+
+            return $this;
+        });
+
+        Browser::macro('clickAndWaitUntilLivewireUpdateFails', function (string $selector, array $updatedKeys = []) use ($waitUntilLivewireUpdate) {
+            /** @var Browser $this */
+            $waitUntilLivewireUpdate($this, $updatedKeys, 'fail', function () use ($selector) {
                 /** @var Browser $this */
                 $this->click($selector);
             });
